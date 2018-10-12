@@ -1,0 +1,46 @@
+---
+- set_fact:
+    ansible_distro: "{{ ansible_distribution|lower|replace(' ', '_')|replace('/', '-') }}"
+
+- name: Gather OS-specific variables
+  include_vars: "{{ item }}"
+  with_first_found:
+    - files:
+      - "{{ ansible_distro }}-{{ansible_distribution_version|lower|replace('/', '_') }}.yml"
+      - "{{ ansible_distro }}-{{ ansible_distribution_release }}.yml"
+      - "{{ ansible_distro }}-{{ansible_distribution_major_version|lower|replace('/', '_') }}.yml"
+      - "{{ ansible_distro }}.yml"
+      - "{{ ansible_os_family|lower }}.yml"
+
+- name: Install packages
+  become: true
+  with_items: "{{ collaborator_packages }}"
+  package:
+    name: "{{ item }}"
+    update_cache: true
+    state: latest
+
+- name: Create collaborator folder
+  become: true
+  file:
+    path: "{{ burp_location }}/collaborator"
+    state: directory
+
+- name: Upload Collaborator
+  become: true
+  copy:
+    src: "../files/{{ burp_jar_name }}"
+    dest: "{{ burp_location }}/collaborator/{{ burp_jar_name }}"
+
+- name: Upload Collaborator Config
+  become: true
+  template:
+    src: ../templates/collaborator.config.j2
+    dest: "{{ burp_location }}/collaborator/collaborator.config"
+
+- name: Upload Collaborator Script
+  become: true
+  template:
+    mode: 0700
+    src: ../templates/collaborate.sh.j2
+    dest: "{{ burp_location }}/collaborator/collaborate.sh"

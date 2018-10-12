@@ -1,0 +1,19 @@
+---
+language: python
+python: 2.7
+
+before_install:
+    - sudo apt-get update -qq
+
+install:
+    # Install Ansible
+    - pip install ansible
+
+script:
+    - ansible-galaxy install leesoh.collaborator
+    - ansible-playbook -i tests/inventory tests/test.yml --syntax-check
+    - ansible-playbook -i tests/inventory tests/test.yml --connection=local
+    - java -jar /opt/collaborator/burpsuite_pro.jar --help
+
+notifications:
+  webhooks: https://galaxy.ansible.com/api/v1/notifications/

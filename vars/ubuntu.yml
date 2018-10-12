@@ -1,0 +1,9 @@
+subdomain: "c.lfo.pw"
+external_ip: "{{ inventory_hostname }}"
+burp_location: "/opt"
+burp_jar_name: "burpsuite_pro.jar"
+
+collaborator_packages:
+  - letsencrypt
+  - openjdk-8-jre
+  - tmux

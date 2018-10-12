@@ -1,0 +1,51 @@
+{
+  "serverDomain" : "{{ subdomain }}",
+  "workerThreads" : 10,
+  "eventCapture": {
+    "localAddress" : ["{{ ansible_default_ipv4.address }}", "127.0.0.1"],
+    "publicAddress" : "{{ external_ip }}",
+    "http": {
+      "ports" : 80
+    },
+    "https": {
+      "ports" : 443
+    },
+    "smtp": {
+      "ports" : [25, 587]
+    },
+    "smtps": {
+      "ports" : 465
+    },
+    "ssl": {
+      "certificateFiles" : [
+        "/etc/letsencrypt/archive/{{ subdomain }}/privkey1.pem",
+        "/etc/letsencrypt/archive/{{ subdomain }}/cert1.pem"
+      ]
+    }
+  },
+  "polling" : {
+    "localAddress" : "{{ ansible_default_ipv4.address }}",
+    "publicAddress" : "{{ external_ip }}",
+    "http": {
+      "port" : 9090
+    },
+    "https": {
+      "port" : 9443
+    },
+    "ssl": {
+      "certificateFiles" : [
+        "/etc/letsencrypt/archive/{{ subdomain }}/privkey1.pem",
+        "/etc/letsencrypt/archive/{{ subdomain }}/cert1.pem"
+      ]
+    }
+  },
+  "dns": {
+    "interfaces" : [{
+      "name":"ns1",
+      "localAddress":"{{ ansible_default_ipv4.address }}",
+      "publicAddress":"{{ external_ip }}"
+    }],
+    "ports" : 53
+  },
+  "logLevel" : "INFO"
+}
