@@ -1,6 +1,6 @@
 ---
 - set_fact:
-    ansible_distro: "{{ ansible_distribution|lower|replace(' ', '_')|replace('/', '-') }}"
+  ansible_distro: "{{ ansible_distribution|lower|replace(' ', '_')|replace('/', '-') }}"
 
 - name: Gather OS-specific variables
   include_vars: "{{ item }}"
@@ -14,9 +14,8 @@
 
 - name: Install packages
   become: true
-  with_items: "{{ collaborator_packages }}"
   package:
-    name: "{{ item }}"
+    name: "{{ collaborator_packages }}"
     update_cache: true
     state: latest
 
